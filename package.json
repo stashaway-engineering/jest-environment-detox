@@ -8,7 +8,10 @@
     "prepublishOnly": "rm -rf dist/ && yarn build"
   },
   "files": [
-    "dist/**/*"
+    "dist/**/*",
+    "index.js",
+    "setup.js",
+    "teardown.js"
   ],
   "dependencies": {
     "@babel/cli": "^7.4.4",
