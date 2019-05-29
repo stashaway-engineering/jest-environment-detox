@@ -22,23 +22,27 @@
 	```json
 	{
 	  "globalSetup": "jest-environment-detox/setup",
-	  "globalTeardown": "jest-environment-detox/teardown",
-	  "testEnvironment": "jest-environment-detox"
+	  "globalTeardown": "jest-environment-detox/teardown"
 	}
 	```
 
-1. Remove `detox.init` and `detox.cleanup` calls from your specs
+1. Update your `detox.init` call
 
 	```js
-	// By default ./jest/setup.js
-
-	 beforeAll(async () => {
-	   await detox.init(config); // <-- Remove this
-	 });
+	// ./jest/setup.js
+		
+	import { getDetoxSession } from 'jest-environment-detox';
+	  
+	const config = require('../package.json').detox;
+	
+	beforeAll(async () => {
+		await detox.init({
+			...config,
+			session: getDetoxSession(process.env.JEST_WORKER_ID),
+		}, {
+			launchApp: false,
+			reuse: true,
+		});
+	});
 	 	 
-	 afterAll(async () => {
-	   await adapter.afterAll(); // <-- Remove this
-	   await detox.cleanup();
-	 });
 	```
-
